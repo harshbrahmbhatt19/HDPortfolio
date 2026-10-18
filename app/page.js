@@ -4,8 +4,10 @@ import Bg from "../components/Bg";
 import Terminal from "../components/Terminal";
 
 const GH = "https://github.com/harshbrahmbhatt19";
+const LI = "https://linkedin.com/in/harsh-brahmbhatt19122005";
+const CONNECT = [["Email", "harshbrahmbhatt1231@gmail.com", "https://mail.google.com/mail/?view=cm&to=harshbrahmbhatt1231@gmail.com"], ["LinkedIn", "harsh-brahmbhatt19122005", LI], ["GitHub", "harshbrahmbhatt19", GH], ["Phone", "+91 95741 90978", "tel:+919574190978"]];
 const MAIL = "https://mail.google.com/mail/?view=cm&to=harshbrahmbhatt1231@gmail.com";
-const CHAPTERS = [["boot", "Boot"], ["problem", "Problem"], ["builds", "Builds"], ["proof", "Proof"], ["toolkit", "Toolkit"], ["notes", "Notes"], ["next", "Next"]];
+const CHAPTERS = [["boot", "Boot"], ["problem", "Problem"], ["builds", "Builds"], ["proof", "Proof"], ["toolkit", "Toolkit"], ["notes", "Notes"], ["next", "Next"], ["connect", "Connect"]];
 const ROLES = ["AI Engineer", "LLM systems builder", "Full-stack developer"];
 const STEPS = [["Allowlist", "Only known components get through."], ["Auto-correct", "Regex repairs common model mistakes."], ["Validate", "JSX is checked before anything renders."], ["Fallback", "A safe error card, never a crash."]];
 const PROJECTS = [
@@ -38,6 +40,50 @@ function useIn() {
   return [r, v];
 }
 function R({ children, className = "", style }) { const [r, v] = useIn(); return <div ref={r} style={style} className={`rv ${v ? "in" : ""} ${className}`}>{children}</div>; }
+// Messages are delivered to your inbox through Web3Forms (free). Set NEXT_PUBLIC_WEB3FORMS_KEY in Vercel.
+// Without a key, the form falls back to opening the visitor's email app with the message filled in.
+const FORM_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "";
+const TO = "harshbrahmbhatt1231@gmail.com";
+function MindForm() {
+  const [st, setSt] = useState("idle"); // idle | sending | done | error
+  const submit = async (e) => {
+    e.preventDefault();
+    const f = e.currentTarget, d = new FormData(f);
+    if (d.get("botcheck")) return; // honeypot: bots tick this hidden box
+    const name = String(d.get("name")).trim(), email = String(d.get("email")).trim(), message = String(d.get("message")).trim();
+    if (!FORM_KEY) {
+      location.href = `mailto:${TO}?subject=${encodeURIComponent("Portfolio message from " + name)}&body=${encodeURIComponent(message + "\n\n" + name + "\n" + email)}`;
+      return;
+    }
+    setSt("sending");
+    try {
+      const r = await fetch("https://api.web3forms.com/submit", {
+        method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ access_key: FORM_KEY, subject: "New message from your portfolio", from_name: "Portfolio", name, email, message }),
+      });
+      const j = await r.json();
+      if (j.success) { setSt("done"); f.reset(); } else setSt("error");
+    } catch { setSt("error"); }
+  };
+  return (
+    <R><form className="card cform" onSubmit={submit}>
+      <h3>What’s on your mind?</h3>
+      <p className="lead">Write to me here and it lands straight in my inbox.</p>
+      <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" className="hp" aria-hidden="true" />
+      <div className="frow">
+        <label>Your name<input name="name" type="text" required maxLength={80} autoComplete="name" /></label>
+        <label>Your email<input name="email" type="email" required maxLength={120} autoComplete="email" /></label>
+      </div>
+      <label>Message<textarea name="message" required rows={5} maxLength={2000} placeholder="A role, an internship, a project idea, or just hello." /></label>
+      <div className="cta"><button className="btn" type="submit" disabled={st === "sending"}>{st === "sending" ? "Sending..." : "Send message"}</button></div>
+      <p className={"fmsg " + st} role="status" aria-live="polite">
+        {st === "done" && "Thanks, your message is on its way. I’ll reply soon."}
+        {st === "error" && "Something went wrong. Please email me directly at " + TO + "."}
+      </p>
+    </form></R>
+  );
+}
+
 function Card({ p }) {
   const mv = (e) => { const b = e.currentTarget.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - 0.5, y = (e.clientY - b.top) / b.height - 0.5; e.currentTarget.style.transform = `perspective(900px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg)`; };
   return (
@@ -120,6 +166,13 @@ export default function Page() {
               <a className="btn ghost" href="tel:+919574190978">+91 95741 90978</a>
               <a className="btn ghost" href="/Harsh_Brahmbhatt_CV.pdf" download>Download CV</a>
             </div></R>
+        </div></section>
+
+        <section id="connect" className="ch connect"><div className="wrap">
+          <R><h2>Let’s connect.</h2>
+            <p className="lead">Have a role, an internship, or an idea in mind? Reach out through any of these and I’ll get back to you.</p></R>
+          <div className="cgrid">{CONNECT.map(([k, v, h], i) => <R key={k} style={{ transitionDelay: i * 100 + "ms" }}><a className="card clink" href={h} {...(h.startsWith("tel:") ? {} : { target: "_blank", rel: "noopener" })}><span className="ck">{k}</span><span className="cv">{v}</span></a></R>)}</div>
+          <MindForm />
         </div><footer className="wrap">© 2026 Harsh Brahmbhatt</footer></section>
       </main>
     </>
