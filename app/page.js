@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import Bg from "../components/Bg";
 import Terminal from "../components/Terminal";
 
@@ -14,7 +15,7 @@ const PROJECTS = [
   { t: "AI UI Generator", s: "Text-to-UI with LLMs", gh: GH + "/ai-ui-generator-", live: "https://ai-ui-generator-phi.vercel.app",
     d: "Describe an interface in plain words and get working React code. A Planner structures the UI, a Generator writes it, and an Explainer describes the design choices. Follow-ups edit the existing UI, with diff view, undo/redo, and version restore.",
     tags: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "Vercel AI SDK", "Groq"] },
-  { t: "Datasense AI", s: "AI-powered ETL pipeline", gh: GH + "/ai-powerd-ETL",
+  { t: "Datasense AI", s: "AI-powered ETL pipeline", gh: GH + "/ai-powerd-ETL", live: "https://ai-powerd-etl-hlbx3h8nrszgataauoymqy.streamlit.app/",
     d: "Upload a CSV, profile it, score its quality on four dimensions, and clean it with four rules. A local Gemma 3:1b model through Ollama answers questions about the data. Results are saved in SQLite.",
     tags: ["Python", "Pandas", "Streamlit", "SQLite", "Ollama"] },
   { t: "SpendSense", s: "Full-stack finance app", gh: GH + "/Spendsense", live: "https://client-two-pi-26.vercel.app",
@@ -40,9 +41,12 @@ function useIn() {
   return [r, v];
 }
 function R({ children, className = "", style }) { const [r, v] = useIn(); return <div ref={r} style={style} className={`rv ${v ? "in" : ""} ${className}`}>{children}</div>; }
-// Messages are delivered to your inbox through Web3Forms (free). Set NEXT_PUBLIC_WEB3FORMS_KEY in Vercel.
-// Without a key, the form falls back to opening the visitor's email app with the message filled in.
-const FORM_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "";
+// Messages are delivered to your inbox through EmailJS. Set these 3 env vars (.env.local and Vercel):
+// NEXT_PUBLIC_EMAILJS_SERVICE_ID, NEXT_PUBLIC_EMAILJS_TEMPLATE_ID, NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+// Without them, the form falls back to opening the visitor's email app with the message filled in.
+const EJS_SERVICE = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "";
+const EJS_TEMPLATE = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "";
+const EJS_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "";
 const TO = "harshbrahmbhatt1231@gmail.com";
 function MindForm() {
   const [st, setSt] = useState("idle"); // idle | sending | done | error
@@ -51,18 +55,14 @@ function MindForm() {
     const f = e.currentTarget, d = new FormData(f);
     if (d.get("botcheck")) return; // honeypot: bots tick this hidden box
     const name = String(d.get("name")).trim(), email = String(d.get("email")).trim(), message = String(d.get("message")).trim();
-    if (!FORM_KEY) {
+    if (!EJS_SERVICE || !EJS_TEMPLATE || !EJS_KEY) {
       location.href = `mailto:${TO}?subject=${encodeURIComponent("Portfolio message from " + name)}&body=${encodeURIComponent(message + "\n\n" + name + "\n" + email)}`;
       return;
     }
     setSt("sending");
     try {
-      const r = await fetch("https://api.web3forms.com/submit", {
-        method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ access_key: FORM_KEY, subject: "New message from your portfolio", from_name: "Portfolio", name, email, message }),
-      });
-      const j = await r.json();
-      if (j.success) { setSt("done"); f.reset(); } else setSt("error");
+      await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, { from_name: name, reply_to: email, message }, { publicKey: EJS_KEY });
+      setSt("done"); f.reset();
     } catch { setSt("error"); }
   };
   return (
