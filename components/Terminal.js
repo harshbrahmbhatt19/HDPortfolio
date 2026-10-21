@@ -2,14 +2,14 @@
 import { useEffect, useRef, useState } from "react";
 const T = {
   about: "Harsh Brahmbhatt, AI Engineer. I make neural and LLM systems dependable in production, with allowlists, validation, auto-correction, and fallbacks.",
-  skills: "AI/ML: Groq, Llama 3.3-70B, Ollama, Vercel AI SDK\nLanguages: Python, JavaScript, TypeScript, C, SQL\nFrontend: React, Next.js, Tailwind CSS\nBackend: Node.js, Express.js, REST APIs\nDatabase: MongoDB, SQLite, MySQL",
-  projects: "1. AI UI Generator: text-to-UI with a 3-stage LLM pipeline\n2. Datasense AI: ETL and data quality tool with a local LLM\n3. SpendSense: full-stack personal finance app",
+  skills: "AI/ML: Groq, Llama 3.3-70B, Ollama, Vercel AI SDK, Prompt Engineering, Pandas, NumPy\nNeural Networks: ANN, Forward Propagation, Backpropagation, Gradient Descent, SGD, Momentum, Adam, Gradient Checking\nLanguages: Python, JavaScript, TypeScript, C, SQL\nFrontend: React, Next.js, Tailwind CSS, Recharts\nBackend: Node.js, Express.js, REST APIs, JWT, bcrypt\nDatabase: MongoDB, SQLite, MySQL\nTools: Git, GitHub, Vercel, Streamlit",
+  projects: "1. AI UI Generator: text-to-UI with a 3-stage LLM pipeline\n2. NeuralLab: interactive neural network learning and debugging platform, built from scratch\n3. Datasense AI: ETL and data quality tool with a local LLM\n4. SpendSense: full-stack personal finance app",
   experience: "Data Engineer Intern, NYSA Shipping (Jul 2026)\nIntern, Atal Tinkering Labs, Mentor India Academy (Jan to Apr 2026)",
   education: "B.E. in Computer Engineering, Vadodara Institute of Engineering (GTU), 2023 to 2027. CGPA 7.35.",
   achievements: "1st rank, college robotics competition: built a line-following robot car with Arduino, IR sensors, and an L298N motor driver.",
   contact: "Email: harshbrahmbhatt1231@gmail.com\nPhone: +91 95741 90978",
 };
-const TECH = /^(Python|JavaScript|TypeScript|C|SQL|SQLite|MySQL|MongoDB|React|Next\.js|Node\.js|Express\.js|Tailwind|Groq|Llama|Ollama|Vercel|Arduino|REST|APIs|LLM|AI|ETL|SDK|CGPA)$/;
+const TECH = /^(Python|JavaScript|TypeScript|C|SQL|SQLite|MySQL|MongoDB|React|Next\.js|Node\.js|Express\.js|Tailwind|Groq|Llama|Ollama|Vercel|NumPy|Pandas|Recharts|JWT|bcrypt|ANN|SGD|Adam|Arduino|REST|APIs|LLM|AI|ETL|SDK|CGPA)$/;
 function hl(s) {
   return s.split(/(\s+)/).map((t, i) => {
     if (!t.trim()) return t;

@@ -15,6 +15,9 @@ const PROJECTS = [
   { t: "AI UI Generator", s: "Text-to-UI with LLMs", gh: GH + "/ai-ui-generator-", live: "https://ai-ui-generator-phi.vercel.app",
     d: "Describe an interface in plain words and get working React code. A Planner structures the UI, a Generator writes it, and an Explainer describes the design choices. Follow-ups edit the existing UI, with diff view, undo/redo, and version restore.",
     tags: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "Vercel AI SDK", "Groq"] },
+  { t: "NeuralLab", s: "Interactive ANN learning and debugging platform", gh: GH + "/neural-lab", live: "https://neural-lab-theta.vercel.app/",
+    d: "A neural network built from scratch in TypeScript, with no ML libraries. Train it with SGD, Momentum, or Adam and watch layers, weights, gradients, loss, and decision boundaries update live. Gradient checking and diagnostics catch training problems.",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind v4", "Recharts", "Backpropagation", "Adam"] },
   { t: "Datasense AI", s: "AI-powered ETL pipeline", gh: GH + "/ai-powerd-ETL", live: "https://ai-powerd-etl-hlbx3h8nrszgataauoymqy.streamlit.app/",
     d: "Upload a CSV, profile it, score its quality on four dimensions, and clean it with four rules. A local Gemma 3:1b model through Ollama answers questions about the data. Results are saved in SQLite.",
     tags: ["Python", "Pandas", "Streamlit", "SQLite", "Ollama"] },
@@ -28,7 +31,7 @@ const PROOF = [
   ["B.E. Computer Engineering", "2023 to 2027", "Vadodara Institute of Engineering (GTU), CGPA 7.35."],
   ["1st rank, robotics competition", "College level", "Built a line-following robot car with Arduino, an IR sensor array, and an L298N motor driver."],
 ];
-const SKILLS = { "AI / ML": ["Groq", "Llama 3.3-70B", "Ollama", "Vercel AI SDK", "Prompt engineering", "Pandas", "NumPy"], Languages: ["Python", "JavaScript", "TypeScript", "C", "SQL"], Frontend: ["React", "Next.js", "Tailwind CSS", "Recharts"], Backend: ["Node.js", "Express.js", "REST APIs", "JWT", "bcrypt"], "Data and cloud": ["MongoDB", "SQLite", "MySQL", "Git", "Vercel", "Streamlit"] };
+const SKILLS = { "AI / ML": ["Groq", "Llama 3.3-70B", "Ollama", "Vercel AI SDK", "Prompt engineering", "Pandas", "NumPy", "Neural networks", "Backpropagation", "Gradient descent", "SGD", "Adam"], Languages: ["Python", "JavaScript", "TypeScript", "C", "SQL"], Frontend: ["React", "Next.js", "Tailwind CSS", "Recharts"], Backend: ["Node.js", "Express.js", "REST APIs", "JWT", "bcrypt"], "Data and cloud": ["MongoDB", "SQLite", "MySQL", "Git", "Vercel", "Streamlit"] };
 const NOTES = [
   ["Never trust model output", "A model can return malformed JSX or an unknown component. I treat every response as untrusted: allowlist, repair, validate, then fall back. The model will be wrong sometimes, so the app has to stay calm."],
   ["Plan, generate, explain", "Splitting text-to-UI into three stages made results easier to debug. Each stage has its own prompt, so when something breaks I know which one to fix."],
@@ -137,7 +140,7 @@ export default function Page() {
         </div></section>
 
         <section id="builds" className="ch"><div className="wrap">
-          <R><h2>Three systems, built to hold up.</h2></R>
+          <R><h2>Four systems, built to hold up.</h2></R>
           <div className="pjs">{PROJECTS.map((p) => <Card key={p.t} p={p} />)}</div>
         </div></section>
 
